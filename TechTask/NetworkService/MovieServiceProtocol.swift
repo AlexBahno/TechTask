@@ -8,16 +8,16 @@
 import Foundation
 import Combine
 
-protocol MovieService {
-    
+protocol MovieServiceProtocol {
+
     func getMoviesPublisher(from endpoint: MovieListEndpoint) -> AnyPublisher<MovieResponse, Error>
     func getMovieDetailPublisher(for id: Int) -> AnyPublisher<Movie, Error>
 }
 
 enum MovieListEndpoint: String, CaseIterable {
-    
+
     case nowPlaying = "now_playing"
-    
+
     var description: String {
         switch self {
         case .nowPlaying: return "Now Playing"
@@ -30,7 +30,7 @@ enum MovieError: Error, CustomNSError {
     case invalidRequest
     case invalidResponse
     case serializationError
-    
+
     var localizedDescription: String {
         switch self {
         case .apiError: return "Failed to fetch data"
