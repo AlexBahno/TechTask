@@ -11,11 +11,11 @@ protocol EmptyData {
     var isEmpty: Bool { get }
 }
 
-struct DataFetchPhaseOverlayView<V:EmptyData>: View {
-    
+struct DataFetchPhaseOverlayView<V: EmptyData>: View {
+
     let phase: DataFetchPhase<V>
-    let retryAction: () -> ()
-    
+    let retryAction: () -> Void
+
     var body: some View {
         switch phase {
         case .empty:

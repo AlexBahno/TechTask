@@ -8,23 +8,27 @@
 import Foundation
 import Combine
 
-class HomeViewModel: ObservableObject {
-    
-    private var apiCaller = MovieAPI.shared
+final class HomeViewModel: ViewModelProtocol {
+
+    typealias T = [Movie]
+
+    private var movieService: MovieServiceProtocol
     private var cancellableSet: Set<AnyCancellable> = []
-    
+
     @Published private(set) var phase: DataFetchPhase<[Movie]> = .empty
-    @Published var movies: [Movie] = []
-    
-    init() {}
-    
-    func getMovies(for endpoint: MovieListEndpoint)  {
+    @Published var data: [Movie] = []
+
+    init(movieService: MovieServiceProtocol) {
+        self.movieService = movieService
+    }
+
+    func getData() {
         phase = .empty
-        apiCaller.getMoviesPublisher(from: endpoint)
+        movieService.getMoviesPublisher(from: .nowPlaying)
             .map(\.results)
             .sink(
                 receiveCompletion: { [weak self] result in
-                    result.error.map{ error in
+                    result.error.map { error in
                         DispatchQueue.main.async {
                             self?.phase = .failure(error)
                         }
@@ -33,10 +37,9 @@ class HomeViewModel: ObservableObject {
                 receiveValue: { [weak self] result in
                     DispatchQueue.main.async {
                         self?.phase = .success(result)
-                        self?.movies = result
+                        self?.data = result
                     }
                 }
-            )
-            .store(in: &cancellableSet)
+            ).store(in: &cancellableSet)
     }
 }

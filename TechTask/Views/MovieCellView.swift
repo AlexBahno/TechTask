@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MovieCellView: View {
-    
+
     let movie: Movie
     @StateObject var imageLoader = ImageLoader()
-    
+
     var body: some View {
-        HStack (alignment: .center) {
+        HStack(alignment: .center) {
             imageView
-            VStack (alignment: .leading) {
+            VStack(alignment: .leading) {
                 Text(movie.title ?? "")
                 Text("Rating: \(movie.scoreText) ⭐️")
                 Text(movie.overview ?? "")
@@ -31,7 +31,7 @@ struct MovieCellView: View {
             self.imageLoader.loadImage(with: movie.posterURL)
         }
     }
-    
+
     private var imageView: some View {
         VStack {
             if let image = imageLoader.image {

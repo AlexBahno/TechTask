@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 extension Subscribers.Completion {
-    
+
     var error: Failure? {
         switch self {
         case .failure(let error):

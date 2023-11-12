@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
-    
-    @StateObject private var viewModel = HomeViewModel()
-    
+
+    @ObservedObject private var viewModel = HomeViewModel(movieService: MovieAPI.shared)
+
     var body: some View {
         NavigationView {
             List {
-                ForEach(viewModel.movies) { movie in
-                    ZStack (alignment: .leading) {
-                        NavigationLink (
-                            destination: MovieDetailView(id: movie.id ?? 0)
+                ForEach(viewModel.data) { movie in
+                    ZStack(alignment: .leading) {
+                        NavigationLink(
+                            destination: 
+                                MovieDetailView(
+                                    viewModel:
+                                        MovieDetailViewModel(
+                                            movieService: MovieAPI.shared,
+                                            movieId: movie.id ?? 0)
+                                )
                         ) {
                             EmptyView()
                         }
@@ -39,9 +45,9 @@ struct HomeView: View {
             }
         }
     }
-    
+
     private func loadMovies() {
-        viewModel.getMovies(for: .nowPlaying)
+        viewModel.getData()
     }
 }
 

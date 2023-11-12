@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol ViewModelProtocol: ObservableObject {
+
+    associatedtype T
+
+    var data: T { get }
+    func getData()
+}
